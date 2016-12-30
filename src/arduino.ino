@@ -17,13 +17,13 @@
 #if not defined (_VARIANT_ARDUINO_DUE_X_) && not defined (_VARIANT_ARDUINO_ZERO_)
 #include <SoftwareSerial.h>
 #endif
-#include <colisionFuncs.ino>1
+//#include <colisionFuncs.ino>
 #include "Adafruit_BLE.h"
 #include "Adafruit_BluefruitLE_SPI.h"
 #include "Adafruit_BluefruitLE_UART.h"
 
 #include "BluefruitConfig.h"
-
+//String commands[2] ={"ebraek","test"}
 /*=========================================================================
     APPLICATION SETTINGS
 
@@ -56,7 +56,7 @@
                               "HWUART"  or "SPI"  or "MANUAL"
     -----------------------------------------------------------------------*/
 #define FACTORYRESET_ENABLE         1
-#define BUFSIZE                        48   // Size of the read buffer for incoming data
+//#define BUFSIZE                        48   // Size of the read buffer for incoming data
 #define MINIMUM_FIRMWARE_VERSION    "0.6.6"
 #define MODE_LED_BEHAVIOUR          "MODE"
 /*=========================================================================*/
@@ -146,6 +146,7 @@ void setup(void)
     // Change Mode LED Activity
     Serial.println(F("Change LED activity to " MODE_LED_BEHAVIOUR));
     ble.sendCommandCheckOK("AT+HWModeLED=" MODE_LED_BEHAVIOUR);
+    //ble.sendCommandCheckOK("AT+BLEPOWERLEVEL=4");
   }
 
   // Set module to DATA mode
@@ -177,11 +178,12 @@ void loop(void)
     ble.print(inputs);
   }
   if (ble.available()) {
+    String str = "";
     // Echo received data
     while ( ble.available() )
     {
       byte c = ble.read();
-
+      str =+ char(c);
       Serial.print(c);
       Serial.print(" or ");
       Serial.println((char)c);
