@@ -1,0 +1,214 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="_bluefruit_config_8h" kind="file" language="C++">
+    <compoundname>BluefruitConfig.h</compoundname>
+      <sectiondef kind="define">
+      <memberdef kind="define" id="_bluefruit_config_8h_1aeca034f67218340ecb2261a22c2f3dcd" prot="public" static="no">
+        <name>BUFSIZE</name>
+        <initializer>128</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" line="5" column="9" bodyfile="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" bodystart="5" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="_bluefruit_config_8h_1ad5755cfbc5c4b61d5a5b88782eee01e8" prot="public" static="no">
+        <name>VERBOSE_MODE</name>
+        <initializer>true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" line="6" column="9" bodyfile="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" bodystart="6" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="_bluefruit_config_8h_1a337eae4f6e9d4c08564e78761afe59c3" prot="public" static="no">
+        <name>BLUEFRUIT_SWUART_RXD_PIN</name>
+        <initializer>9</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" line="14" column="9" bodyfile="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" bodystart="14" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="_bluefruit_config_8h_1a103aa617baa79e085e80ae54e9189b15" prot="public" static="no">
+        <name>BLUEFRUIT_SWUART_TXD_PIN</name>
+        <initializer>10</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" line="15" column="9" bodyfile="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="_bluefruit_config_8h_1a7044be5e83b0688bc0ebecaa83ae1ccb" prot="public" static="no">
+        <name>BLUEFRUIT_UART_CTS_PIN</name>
+        <initializer>11</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" line="16" column="9" bodyfile="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="_bluefruit_config_8h_1a2fef983f3c48c678ffab135ae7ffb7f1" prot="public" static="no">
+        <name>BLUEFRUIT_UART_RTS_PIN</name>
+        <initializer>-1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" line="17" column="9" bodyfile="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="_bluefruit_config_8h_1a3b9e671cc7cff949da4898533174aa4f" prot="public" static="no">
+        <name>BLUEFRUIT_UART_MODE_PIN</name>
+        <initializer>12</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" line="34" column="9" bodyfile="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="_bluefruit_config_8h_1a7999cb6739eeaf318759f6bea7276a6b" prot="public" static="no">
+        <name>BLUEFRUIT_SPI_CS</name>
+        <initializer>8</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" line="44" column="9" bodyfile="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="_bluefruit_config_8h_1ae7aa68da0177ce688218cc9a85e57428" prot="public" static="no">
+        <name>BLUEFRUIT_SPI_IRQ</name>
+        <initializer>7</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" line="45" column="9" bodyfile="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="_bluefruit_config_8h_1ae2990cba40c835671aa2ec69d0b5e4d5" prot="public" static="no">
+        <name>BLUEFRUIT_SPI_RST</name>
+        <initializer>4</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" line="46" column="9" bodyfile="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="_bluefruit_config_8h_1af53c1d3e4211e76e2aec93d8db60c40e" prot="public" static="no">
+        <name>BLUEFRUIT_SPI_SCK</name>
+        <initializer>13</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" line="54" column="9" bodyfile="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="_bluefruit_config_8h_1a2e36d60a70099285567e16935dbe1961" prot="public" static="no">
+        <name>BLUEFRUIT_SPI_MISO</name>
+        <initializer>12</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" line="55" column="9" bodyfile="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="_bluefruit_config_8h_1a76608cbd6816d472ddc04002d73f4310" prot="public" static="no">
+        <name>BLUEFRUIT_SPI_MOSI</name>
+        <initializer>11</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" line="56" column="9" bodyfile="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">//<sp/>COMMON<sp/>SETTINGS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//<sp/>----------------------------------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//<sp/>These<sp/>settings<sp/>are<sp/>used<sp/>in<sp/>both<sp/>SW<sp/>UART,<sp/>HW<sp/>UART<sp/>and<sp/>SPI<sp/>mode</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="comment">//<sp/>----------------------------------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>BUFSIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>128<sp/><sp/><sp/>//<sp/>Size<sp/>of<sp/>the<sp/>read<sp/>buffer<sp/>for<sp/>incoming<sp/>data</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>VERBOSE_MODE<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>true<sp/><sp/>//<sp/>If<sp/>set<sp/>to<sp/>&apos;true&apos;<sp/>enables<sp/>debug<sp/>output</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="comment">//<sp/>SOFTWARE<sp/>UART<sp/>SETTINGS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="comment">//<sp/>----------------------------------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="comment">//<sp/>The<sp/>following<sp/>macros<sp/>declare<sp/>the<sp/>pins<sp/>that<sp/>will<sp/>be<sp/>used<sp/>for<sp/>&apos;SW&apos;<sp/>serial.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="comment">//<sp/>You<sp/>should<sp/>use<sp/>this<sp/>option<sp/>if<sp/>you<sp/>are<sp/>connecting<sp/>the<sp/>UART<sp/>Friend<sp/>to<sp/>an<sp/>UNO</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="comment">//<sp/>----------------------------------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>BLUEFRUIT_SWUART_RXD_PIN<sp/><sp/><sp/><sp/><sp/><sp/><sp/>9<sp/><sp/><sp/><sp/>//<sp/>Required<sp/>for<sp/>software<sp/>serial!</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>BLUEFRUIT_SWUART_TXD_PIN<sp/><sp/><sp/><sp/><sp/><sp/><sp/>10<sp/><sp/><sp/>//<sp/>Required<sp/>for<sp/>software<sp/>serial!</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>BLUEFRUIT_UART_CTS_PIN<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>11<sp/><sp/><sp/>//<sp/>Required<sp/>for<sp/>software<sp/>serial!</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>BLUEFRUIT_UART_RTS_PIN<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>-1<sp/><sp/><sp/>//<sp/>Optional,<sp/>set<sp/>to<sp/>-1<sp/>if<sp/>unused</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="comment">//<sp/>HARDWARE<sp/>UART<sp/>SETTINGS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="comment">//<sp/>----------------------------------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="comment">//<sp/>The<sp/>following<sp/>macros<sp/>declare<sp/>the<sp/>HW<sp/>serial<sp/>port<sp/>you<sp/>are<sp/>using.<sp/>Uncomment</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="comment">//<sp/>this<sp/>line<sp/>if<sp/>you<sp/>are<sp/>connecting<sp/>the<sp/>BLE<sp/>to<sp/>Leonardo/Micro<sp/>or<sp/>Flora</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="comment">//<sp/>----------------------------------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>Serial1<sp/><sp/><sp/><sp/>//<sp/>this<sp/>makes<sp/>it<sp/>not<sp/>complain<sp/>on<sp/>compilation<sp/>if<sp/>there&apos;s<sp/>no<sp/>Serial1</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor"><sp/><sp/>#define<sp/>BLUEFRUIT_HWSERIAL_NAME<sp/><sp/><sp/><sp/><sp/><sp/>Serial1</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="comment">//<sp/>SHARED<sp/>UART<sp/>SETTINGS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="comment">//<sp/>----------------------------------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="comment">//<sp/>The<sp/>following<sp/>sets<sp/>the<sp/>optional<sp/>Mode<sp/>pin,<sp/>its<sp/>recommended<sp/>but<sp/>not<sp/>required</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="comment">//<sp/>----------------------------------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>BLUEFRUIT_UART_MODE_PIN<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>12<sp/><sp/><sp/><sp/>//<sp/>Set<sp/>to<sp/>-1<sp/>if<sp/>unused</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="comment">//<sp/>SHARED<sp/>SPI<sp/>SETTINGS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="comment">//<sp/>----------------------------------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="comment">//<sp/>The<sp/>following<sp/>macros<sp/>declare<sp/>the<sp/>pins<sp/>to<sp/>use<sp/>for<sp/>HW<sp/>and<sp/>SW<sp/>SPI<sp/>communication.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight><highlight class="comment">//<sp/>SCK,<sp/>MISO<sp/>and<sp/>MOSI<sp/>should<sp/>be<sp/>connected<sp/>to<sp/>the<sp/>HW<sp/>SPI<sp/>pins<sp/>on<sp/>the<sp/>Uno<sp/>when</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight><highlight class="comment">//<sp/>using<sp/>HW<sp/>SPI.<sp/><sp/>This<sp/>should<sp/>be<sp/>used<sp/>with<sp/>nRF51822<sp/>based<sp/>Bluefruit<sp/>LE<sp/>modules</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight><highlight class="comment">//<sp/>that<sp/>use<sp/>SPI<sp/>(Bluefruit<sp/>LE<sp/>SPI<sp/>Friend).</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight><highlight class="comment">//<sp/>----------------------------------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>BLUEFRUIT_SPI_CS<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>8</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>BLUEFRUIT_SPI_IRQ<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>7</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>BLUEFRUIT_SPI_RST<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>4<sp/><sp/><sp/><sp/>//<sp/>Optional<sp/>but<sp/>recommended,<sp/>set<sp/>to<sp/>-1<sp/>if<sp/>unused</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight><highlight class="comment">//<sp/>SOFTWARE<sp/>SPI<sp/>SETTINGS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight><highlight class="comment">//<sp/>----------------------------------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight><highlight class="comment">//<sp/>The<sp/>following<sp/>macros<sp/>declare<sp/>the<sp/>pins<sp/>to<sp/>use<sp/>for<sp/>SW<sp/>SPI<sp/>communication.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight><highlight class="comment">//<sp/>This<sp/>should<sp/>be<sp/>used<sp/>with<sp/>nRF51822<sp/>based<sp/>Bluefruit<sp/>LE<sp/>modules<sp/>that<sp/>use<sp/>SPI</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight><highlight class="comment">//<sp/>(Bluefruit<sp/>LE<sp/>SPI<sp/>Friend).</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight><highlight class="comment">//<sp/>----------------------------------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>BLUEFRUIT_SPI_SCK<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>13</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>BLUEFRUIT_SPI_MISO<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>12</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>BLUEFRUIT_SPI_MOSI<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>11</highlight></codeline>
+    </programlisting>
+    <location file="/Users/connerreitmeier/Desktop/blecaratom/src/BluefruitConfig.h"/>
+  </compounddef>
+</doxygen>
