@@ -45,7 +45,7 @@ Adafruit_BluefruitLE_UART ble(bluefruitSS, 53,
                               52, 48);
 
 
-int mode = 3;
+int mode = 0;
 String str = "";
 // A small helper
 void error(const __FlashStringHelper*err) {
@@ -278,7 +278,9 @@ void checkSensors(){
   //delay(2000);
 }
 void checkCommand(String str){
-
+  if (str.indexOf("emergancyMode")){
+    
+  }
 }
 boolean irSensorCheck(int pin){
   //Serial.println(digitalRead(pin));
