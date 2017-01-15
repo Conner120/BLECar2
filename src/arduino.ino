@@ -32,6 +32,42 @@ boolean rearRightSensorState = true;
 boolean forward = true;
 boolean forwardRight = true;
 
+/*  MonsterMoto Shield Example Sketch
+  date: 5/24/11
+  code by: Jim Lindblom
+  hardware by: Nate Bernstein
+  SparkFun Electronics
+
+ License: CC-SA 3.0, feel free to use this code however you'd like.
+ Please improve upon it! Let me know how you've made it better.
+
+ This is really simple example code to get you some basic
+ functionality with the MonsterMoto Shield. The MonsterMote uses
+ two VNH2SP30 high-current full-bridge motor drivers.
+
+ Use the motorGo(uint8_t motor, uint8_t direct, uint8_t pwm)
+ function to get motors going in either CW, CCW, BRAKEVCC, or
+ BRAKEGND. Use motorOff(int motor) to turn a specific motor off.
+
+ The motor variable in each function should be either a 0 or a 1.
+ pwm in the motorGo function should be a value between 0 and 255.
+ */
+#define BRAKEVCC 0
+#define CW   1
+#define CCW  2
+#define BRAKEGND 3
+#define CS_THRESHOLD 100
+
+/*  VNH2SP30 pin definitions
+ xxx[0] controls '1' outputs
+ xxx[1] controls '2' outputs */
+int inApin[2] = {7, 4};  // INA: Clockwise input
+int inBpin[2] = {8, 9}; // INB: Counter-clockwise input
+int pwmpin[2] = {5, 6}; // PWM input
+int cspin[2] = {2, 3}; // CS: Current sense ANALOG input
+int enpin[2] = {0, 1}; // EN: Status of switches output (Analog pin)
+
+int statpin = 13;
 
 
 #define FACTORYRESET_ENABLE         0
@@ -57,6 +93,21 @@ if (mode>0){
 
 void setup(void)
 {
+  pinMode(statpin, OUTPUT);
+
+// Initialize digital pins as outputs
+for (int i=0; i<2; i++)
+{
+  pinMode(inApin[i], OUTPUT);
+  pinMode(inBpin[i], OUTPUT);
+  pinMode(pwmpin[i], OUTPUT);
+}
+// Initialize braked
+for (int i=0; i<2; i++)
+{
+  digitalWrite(inApin[i], LOW);
+  digitalWrite(inBpin[i], LOW);
+}
   pinMode(rearFallSensorPin, INPUT);
   while (!Serial);  // required for Flora & Micro
   delay(500);
@@ -89,7 +140,7 @@ if (mode>0){
 
   /* Disable command echo from Bluefruit */
   ble.echo(false);
-if (mode>0){
+if (mode>1){
   Serial.println("Requesting Bluefruit info:");
 }
   /* Print Bluefruit information */
@@ -102,7 +153,7 @@ if (mode>0){
   ble.verbose(false);  // debug info is a little annoying after this point!
 
   /* Wait for connection
-  while (! ble.isConnected()) {
+  while (! c) {
     delay(500);
   }
 */
@@ -117,6 +168,7 @@ if (mode>0){
     Serial.println(F("Change LED activity to " MODE_LED_BEHAVIOUR));
     }
     ble.sendCommandCheckOK("AT+HWModeLED=" MODE_LED_BEHAVIOUR);
+      ble.sendCommandCheckOK("AT+GAPDEVNAME=Robot By Conner");
     //ble.sendCommandCheckOK("AT+BLEPOWERLEVEL=4");
   }
 
@@ -137,7 +189,9 @@ void loop(void)
 {
   //delay(2500);
   //Serial.println("Entering Check Sensors Function");
+  if (millis() % 100 == 0){
   checkSensors();
+  }
   if (ble.available()) {
 
     // Echo receive data
@@ -159,6 +213,13 @@ void loop(void)
           float motorValue = str.substring(1,str.length()-1).toFloat()/5;
           Serial.println(str.substring(1,str.length()-1));
           Serial.println("Right Motor run at: "+String(motorValue)+"%");
+          if ((motorValue*1023)>0){
+          motorgo(0,2,motorValue*1023);
+        }else if ((motorValue*1023)>0){
+          motorgo(0,1,motorValue*1023);
+        }else{
+          motorgo(0,1,0);
+        }
         }else if(str[0]=='l'){
           float motorValue = str.substring(1,str.length()-1).toFloat()/5;
           Serial.println(str.substring(1,str.length()-1));
@@ -171,7 +232,7 @@ void loop(void)
     }
   }
 }
-delay(100);
+//delay(100);
 }
 void checkSensors(){
   //Serial.println("Entering Check Sensors Function");
@@ -278,8 +339,10 @@ void checkSensors(){
   //delay(2000);
 }
 void checkCommand(String str){
-  if (str.indexOf("emergancyMode")){
-    
+  if (str.indexOf("emergancyMode")>-1){
+
+  } else if (str.indexOf("debugoff")>-1){
+    mode = 0;
   }
 }
 boolean irSensorCheck(int pin){
@@ -323,4 +386,46 @@ void findAvaliblePath(){
       }
       return 4;
     }
+}
+
+void sendDebugMesg(String msg,int lev){
+    Serial.println(msg);
+}
+/* motorGo() will set a motor going in a specific direction
+ the motor will continue going in that direction, at that speed
+ until told to do otherwise.
+
+ motor: this should be either 0 or 1, will selet which of the two
+ motors to be controlled
+
+ direct: Should be between 0 and 3, with the following result
+ 0: Brake to VCC
+ 1: Clockwise
+ 2: CounterClockwise
+ 3: Brake to GND
+
+ pwm: should be a value between ? and 1023, higher the number, the faster
+ it'll go
+ */
+void motorgo(uint8_t motor, uint8_t direct, uint8_t pwm)
+{
+  if (motor <= 1)
+  {
+    if (direct <=4)
+    {
+      // Set inA[motor]
+      if (direct <=1)
+        digitalWrite(inApin[motor], HIGH);
+      else
+        digitalWrite(inApin[motor], LOW);
+
+      // Set inB[motor]
+      if ((direct==0)||(direct==2))
+        digitalWrite(inBpin[motor], HIGH);
+      else
+        digitalWrite(inBpin[motor], LOW);
+
+      analogWrite(pwmpin[motor], pwm);
+    }
+  }
 }
