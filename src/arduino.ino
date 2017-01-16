@@ -31,7 +31,15 @@ boolean rearRightSensorState = true;
 //diffine sector avalibility
 boolean forward = true;
 boolean forwardRight = true;
-
+int RRWL = 35;
+int LRWL = 32;
+int RFWL = 40;
+int LFWL = 41;
+int RRRL = 33;
+int LRRL = 34;
+int seirnRed[5] = {22, 24, 26 };
+int seirnBlue[5] = {23, 25, 27, 29, 31};
+int horn = 23;
 /*  MonsterMoto Shield Example Sketch
   date: 5/24/11
   code by: Jim Lindblom
@@ -93,6 +101,12 @@ if (mode>0){
 
 void setup(void)
 {
+  pinMode(RRWL, OUTPUT);
+  pinMode(RFWL, OUTPUT);
+  pinMode(LRWL, OUTPUT);
+  pinMode(LFWL, OUTPUT);
+  pinMode(RRRL, OUTPUT);
+  pinMode(LRRL, OUTPUT);
   pinMode(statpin, OUTPUT);
 
 // Initialize digital pins as outputs
@@ -213,10 +227,10 @@ void loop(void)
           float motorValue = str.substring(1,str.length()-1).toFloat()/5;
           Serial.println(str.substring(1,str.length()-1));
           Serial.println("Right Motor run at: "+String(motorValue)+"%");
-          if ((motorValue*1023)>0){
+          if ((motorValue*1023)<0.000){
+          motorgo(0,1,motorValue*-1023);
+        }else if ((motorValue*1023)>0.000){
           motorgo(0,2,motorValue*1023);
-        }else if ((motorValue*1023)>0){
-          motorgo(0,1,motorValue*1023);
         }else{
           motorgo(0,1,0);
         }
@@ -224,6 +238,13 @@ void loop(void)
           float motorValue = str.substring(1,str.length()-1).toFloat()/5;
           Serial.println(str.substring(1,str.length()-1));
           Serial.println("Right Motor run at: "+String(motorValue)+"%");
+          if ((motorValue*1023)<0.000){
+          motorgo(1,1,motorValue*-1023);
+        }else if ((motorValue*1023)>0.000){
+          motorgo(1,2,motorValue*1023);
+        }else{
+          motorgo(1,1,0);
+        }
         }else{
           checkCommand(str);
         }
@@ -344,6 +365,24 @@ void checkCommand(String str){
   } else if (str.indexOf("debugoff")>-1){
     mode = 0;
   }
+  else if (str.indexOf("hLightOn")>-1){
+    headLightOff();
+  }
+  else if (str.indexOf("hLightOff")>-1){
+    headLightOn();
+  }
+}
+void headLightOn(){
+  digitalWrite(LRWL, true);
+  digitalWrite(RRWL, true);
+  digitalWrite(LFWL, true);
+  digitalWrite(RFWL, true);
+}
+void headLightOff(){
+  digitalWrite(LRWL, false);
+  digitalWrite(RRWL, false);
+  digitalWrite(LFWL, false);
+  digitalWrite(RFWL, false);
 }
 boolean irSensorCheck(int pin){
   //Serial.println(digitalRead(pin));
