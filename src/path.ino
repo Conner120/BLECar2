@@ -32,3 +32,7 @@ void exPath(){
 void forwardAuto(int speed){
 
 }
+void getSensor(){
+  sensors_event_t event;
+bno.getEvent(&event);
+}
