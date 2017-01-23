@@ -11,6 +11,30 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
+
+#include <Adafruit_GPS.h>
+
+// This sketch is ONLY for the Arduino Due!
+// You should make the following connections with the Due and GPS module:
+// GPS power pin to Arduino Due 3.3V output.
+// GPS ground pin to Arduino Due ground.
+// For hardware serial 1 (recommended):
+//   GPS TX to Arduino Due Serial1 RX pin 19
+//   GPS RX to Arduino Due Serial1 TX pin 18
+#define mySerial Serial1
+
+Adafruit_GPS GPS(&mySerial);
+
+
+// Set GPSECHO to 'false' to turn off echoing the GPS data to the Serial console
+// Set to 'true' if you want to debug and listen to the raw GPS sentences.
+#define GPSECHO  true
+
+// this keeps track of whether we're using the interrupt
+// off by default!
+boolean usingInterrupt = false;
+void useInterrupt(boolean); // Func prototype keeps Arduino 0023 happy
+
 #define BNO055_SAMPLERATE_DELAY_MS (100)
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
@@ -50,6 +74,8 @@ int threeQuarterSpeed = 384;
 int quarterSpeed = 128;
 float origonalHeading = 0.0;
 float finalHeading = 0.0;
+float heading = 0.0;
+
 int RRRL = 33;
 int LRRL = 34;
 int seirnRed[5] = {22, 24, 26 };
@@ -143,20 +169,20 @@ void setup(void)
 
   Serial.begin(115200);
   /* Initialise the sensor */
- if(!bno.begin())
- {
-   /* There was a problem detecting the BNO055 ... check your connections */
-   Serial.print("Ooops, no BNO055 detected ... Check your wiring or I2C ADDR!");
-   while(1);
- }
+  if (!bno.begin())
+  {
+    /* There was a problem detecting the BNO055 ... check your connections */
+    sendDebugMesg(F("Ooops, no BNO055 detected ... Check your wiring or I2C ADDR!"));
+    //while (1);
+  }
 
- /* Display some basic information on this sensor */
- displaySensorDetails();
+  /* Display some basic information on this sensor */
+  displaySensorDetails();
 
- /* Optional: Display current status */
- displaySensorStatus();
+  /* Optional: Display current status */
+  displaySensorStatus();
 
- bno.setExtCrystalUse(true);
+  bno.setExtCrystalUse(true);
   if (mode > 0) {
     sendDebugMesg(F("Adafruit Bluefruit Command <-> Data Mode Example"));
     sendDebugMesg(F("------------------------------------------------"));
@@ -185,7 +211,7 @@ void setup(void)
   /* Disable command echo from Bluefruit */
   ble.echo(false);
   if (mode > 1) {
-    sendDebugMesg("Requesting Bluefruit info:");
+    sendDebugMesg(F("Requesting Bluefruit info:"));
   }
   /* Print Bluefruit information */
   ble.info();
@@ -211,8 +237,8 @@ void setup(void)
     if (mode > 0) {
       sendDebugMesg(F("Change LED activity to " MODE_LED_BEHAVIOUR));
     }
-    ble.sendCommandCheckOK("AT+HWModeLED=" MODE_LED_BEHAVIOUR);
-    ble.sendCommandCheckOK("AT+GAPDEVNAME=Robot By Conner");
+    ble.sendCommandCheckOK(F("AT+HWModeLED=" MODE_LED_BEHAVIOUR));
+    ble.sendCommandCheckOK(F("AT+GAPDEVNAME=Robot By Conner"));
     //ble.sendCommandCheckOK("AT+BLEPOWERLEVEL=4");
   }
 
@@ -222,15 +248,132 @@ void setup(void)
   if (mode > 0) {
     sendDebugMesg(F("******************************"));
   }
+  Serial.println(F("Adafruit GPS library basic test!"));
+
+  // 9600 NMEA is the default baud rate for Adafruit MTK GPS's- some use 4800
+  GPS.begin(9600);
+  mySerial.begin(9600);
+
+  // uncomment this line to turn on RMC (recommended minimum) and GGA (fix data) including altitude
+  GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
+  // uncomment this line to turn on only the "minimum recommended" data
+  //GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);
+  // For parsing data, we don't suggest using anything but either RMC only or RMC+GGA since
+  // the parser doesn't care about other sentences at this time
+
+  // Set the update rate
+  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);   // 1 Hz update rate
+  // For the parsing code to work nicely and have time to sort thru the data, and
+  // print it out we don't suggest using anything higher than 1 Hz
+
+  // Request updates on antenna status, comment out to keep quiet
+  GPS.sendCommand(PGCMD_ANTENNA);
+
+  // the nice thing about this code is you can have a timer0 interrupt go off
+  // every 1 millisecond, and read data from the GPS for you. that makes the
+  // loop code a heck of a lot easier!
+
+#ifdef __arm__
+  usingInterrupt = false;  //NOTE - we don't want to use interrupts on the Due
+#else
+  useInterrupt(true);
+#endif
+
+  delay(1000);
+  // Ask for firmware version
+  mySerial.println(PMTK_Q_RELEASE);
 }
+
+#ifdef __AVR__
+// Interrupt is called once a millisecond, looks for any new GPS data, and stores it
+SIGNAL(TIMER0_COMPA_vect) {
+  char c = GPS.read();
+  // if you want to debug, this is a good time to do it!
+#ifdef UDR0
+  if (GPSECHO)
+    if (c) UDR0 = c;
+    // writing direct to UDR0 is much much faster than Serial.print
+    // but only one character can be written at a time.
+#endif
+}
+
+void useInterrupt(boolean v) {
+  if (v) {
+    // Timer0 is already used for millis() - we'll just interrupt somewhere
+    // in the middle and call the "Compare A" function above
+    OCR0A = 0xAF;
+    TIMSK0 |= _BV(OCIE0A);
+    usingInterrupt = true;
+  } else {
+    // do not call the interrupt function COMPA anymore
+    TIMSK0 &= ~_BV(OCIE0A);
+    usingInterrupt = false;
+  }
+}
+#endif //#ifdef__AVR__
+
 
 /**************************************************************************/
 /*!
     @brief  Constantly poll for new command or response data
 */
 /**************************************************************************/
+
+uint32_t timer = millis();
+
 void loop(void)
 {
+  // in case you are not using the interrupt above, you'll
+  // need to 'hand query' the GPS, not suggested :(
+  if (! usingInterrupt) {
+    // read data from the GPS in the 'main loop'
+    char c = GPS.read();
+    // if you want to debug, this is a good time to do it!
+    if (GPSECHO)
+      if (c) Serial.print(c);
+  }
+
+  // if a sentence is received, we can check the checksum, parse it...
+  if (GPS.newNMEAreceived()) {
+    // a tricky thing here is if we print the NMEA sentence, or data
+    // we end up not listening and catching other sentences!
+    // so be very wary if using OUTPUT_ALLDATA and trytng to print out data
+    //Serial.println(GPS.lastNMEA());   // this also sets the newNMEAreceived() flag to false
+
+    if (!GPS.parse(GPS.lastNMEA()))   // this also sets the newNMEAreceived() flag to false
+      return;  // we can fail to parse a sentence in which case we should just wait for another
+  }
+
+  // if millis() or timer wraps around, we'll just reset it
+  if (timer > millis())  timer = millis();
+
+  // approximately every 2 seconds or so, print out the current stats
+  if (millis() - timer > 2000) {
+    timer = millis(); // reset the timer
+
+    Serial.print(F("\nTime: "));
+    Serial.print(GPS.hour, DEC); Serial.print(':');
+    Serial.print(GPS.minute, DEC); Serial.print(':');
+    Serial.print(GPS.seconds, DEC); Serial.print('.');
+    Serial.println(GPS.milliseconds);
+    Serial.print(F("Date: "));
+    Serial.print(GPS.day, DEC); Serial.print('/');
+    Serial.print(GPS.month, DEC); Serial.print(F("/20"));
+    Serial.println(GPS.year, DEC);
+    Serial.print(F("Fix: ")); Serial.print((int)GPS.fix);
+    Serial.print(F(" quality: ")); Serial.println((int)GPS.fixquality);
+    if (GPS.fix) {
+      Serial.print(F("Location: "));
+      Serial.print(GPS.latitude, 4); Serial.print(GPS.lat);
+      Serial.print(F(", "));
+      Serial.print(GPS.longitude, 4); Serial.println(GPS.lon);
+
+      Serial.print(F("Speed (knots): ")); Serial.println(GPS.speed);
+      Serial.print(F("Angle: ")); Serial.println(GPS.angle);
+      Serial.print(F("Altitude: ")); Serial.println(GPS.altitude);
+      Serial.print(F("Satellites: ")); Serial.println((int)GPS.satellites);
+    }
+  }
   //delay(2500);
   //Serial.println("Entering Check Sensors Function");
   if (millis() % 100 == 0) {
@@ -249,9 +392,9 @@ void loop(void)
       //    Serial.print(c, HEX);
       //    Serial.print("] ");
       if (c == '/') {
-      ///  if (mode > 1) {
-          sendDebugMesg(str);
-          sendDebugMesg(F("Running Command Checker..."));
+        ///  if (mode > 1) {
+        sendDebugMesg(str);
+        sendDebugMesg(F("Running Command Checker..."));
         //}
         if (str[0] == 'r') {
           float motorValue = str.substring(1, str.length() - 1).toFloat() / 5;
@@ -276,7 +419,7 @@ void loop(void)
             motorgo(1, 1, 0);
           }
         } else {
-          sendDebugMesg("command");
+          sendDebugMesg(F("command"));
           checkCommand(str);
         }
         str = "";
@@ -298,9 +441,9 @@ void loop(void)
       //    Serial.print(c, HEX);
       //    Serial.print("] ");
       if (c == '/') {
-      ///  if (mode > 1) {
-          sendDebugMesg(str);
-          sendDebugMesg(F("Running Command Checker..."));
+        ///  if (mode > 1) {
+        //sendDebugMesg(str);
+        //sendDebugMesg(F("Running Command Checker..."));
         //}
         if (str[0] == 'r') {
           float motorValue = str.substring(1, str.length() - 1).toFloat() / 5;
@@ -325,10 +468,11 @@ void loop(void)
             motorgo(1, 1, 0);
           }
         } else {
-          sendDebugMesg("command");
+          sendDebugMesg(F("command"));
           checkCommand(str);
         }
         str = "";
+        ble.flush();
         break;
       }
     }
@@ -336,122 +480,122 @@ void loop(void)
   //delay(100);
 }
 void checkSensors() {
+  String statStr ="s";
   //Serial.println("Entering Check Sensors Function");
-  Serial.print("s");
   if (irSensorCheck(sideLeftSensorPin)) {
-    Serial.print("1");
+    statStr += "1";
     sideLeftSensorState = false;
     stop();
   } else {
-    Serial.print("0");
+    statStr += "0";
     sideLeftSensorState = true;
   }
   if (irSensorCheck(frontRightSensorPin)) {
-    Serial.print("1");
+    statStr += "1";
     frontRightSensorState = false;
     stop();
   } else {
     frontRightSensorState = true;
-    Serial.print("0");
+    statStr += "0";
   }
   if (irSensorCheck(rearLeftSensorPin)) { //4
-    Serial.print("1");
+    statStr += "1";
     rearLeftSensorState = false;
     stop();
   } else {
     rearLeftSensorState = true;
-    Serial.print("0");
+    statStr += "0";
   }
 
   if (irSensorCheck(sideRightSensorPin)) { //1
-    Serial.print("1");
+    statStr += "1";
     sideRightSensorState = false;
     stop();
   } else {
-    Serial.print("0");
+    statStr += "0";
     sideRightSensorState = true;
   }
   if (irSensorCheck(frontLeftSensorPin)) { //5
-    Serial.print("1");
+    statStr += "1";
     frontLeftSensorState = false;
     stop();
   } else {
-    Serial.print("0");
+    statStr += "0";
     frontLeftSensorState = true;
   }
   if (irSensorCheck(rearRightSensorPin)) { //2
-    Serial.print("1");
+    statStr += "1";
     rearRightSensorState = false;
     stop();
   } else {
-    Serial.print("0");
+    statStr += "0";
     rearRightSensorState = true;
   }
   if (irSensorCheck(frontCenterSensorPin)) {
-    Serial.print("1");
+    statStr += "1";
     frontCenterSensorState = false;
     stop();
   } else {
-    Serial.print("0");
+    statStr += "0";
     frontCenterSensorState = true;
   }
   if (irSensorCheck(rearCenterSensorPin)) {
-    Serial.print("1");
+    statStr += "1";
     rearCenterSensorState = false;
     stop();
   } else {
-    Serial.print("0");
+    statStr += "0";
     rearCenterSensorState = true;
   }
 
 
 
   if (irSensorCheck(rearFallSensorPin)) { //3
-    Serial.print("1");
+    statStr += "1";
     rearFallSensorState = false;
     stop();
   } else {
-    Serial.print("0");
+    statStr += "0";
     rearFallSensorState = true;
   }
 
 
 
   if (irSensorCheck(frontFallSensorPin)) { //4
-    Serial.print("1");
+    statStr += "1";
     frontFallSensorState = false;
     stop();
   } else {
-    Serial.print("0");
+    statStr += "0";
     frontFallSensorState = true;
   }
-
+  sendDebugMesg(statStr);
 
 
   //
 
   // if (irSensorCheck(frontFallSensorPin)){
-  //   Serial.print("1");
+  //   statStr += "1";
   //   stop();
   // }else{
-  //   Serial.print("0");
+  //   statStr += "0";
   // }
   //Serial.println();
   //delay(2000);
 }
 void checkCommand(String str) {
   sendDebugMesg(str);
-  if (str.indexOf("emergancyMode/") > -1) {
+  if (str.indexOf(F("emergancyMode/")) > -1) {
 
-  } else if (str.indexOf("debugoff/") > -1) {
+  } else if (str.indexOf(F("debugoff/")) > -1) {
     mode = 0;
   }
-  else if (str.indexOf("hLightOn/") > -1) {
+  else if (str.indexOf(F("hLightOn/")) > -1) {
     headLightOn();
-    sendDebugMesg("headLightOn");
+    sendDebugMesg(F("headLightOn"));
   }
-  else if (str.indexOf("hLightOff/") > -1) {
-    sendDebugMesg("head lights off");
+  else if (str.indexOf(F("hLightOff/")) > -1) {
+    sendDebugMesg(F("head lights off"));
     headLightOff();
   }
 }
@@ -495,30 +639,32 @@ void stop() {
 int findAvaliblePath() {
   if (frontCenterSensorState) {
     return 1;//forward
-  }else if (frontRightSensorState) {
+  } else if (frontRightSensorState) {
     if (sideRightSensorState) {
       return 3;//turn Right
     }
     return 2;//right diagonal
-  }else if (frontLeftSensorState) {
+  } else if (frontLeftSensorState) {
     if (sideLeftSensorState) {
       return 5;//turn left
     }
     return 4;//left diagonal
-  } else if (rearLeftSensorState){
+  } else if (rearLeftSensorState) {
     return 6;//turn around and then turn left
-  } else if (rearRightSensorState){
+  } else if (rearRightSensorState) {
     return 7;//turn around and then turn Right
-  }else if (rearCenterSensorState){
+  } else if (rearCenterSensorState) {
     return 8;//turn right and if a side is becomes open turn that way
   }
-return 0;
+  return 0;
 }
 
 
-void sendDebugMesg(String msg){
-  if (debuging){
+void sendDebugMesg(String msg) {
+  if (debuging) {
     Serial.println(msg);
+    ble.println(msg);
+
   }
 }
 /* motorGo() will set a motor going in a specific direction
@@ -570,37 +716,37 @@ void displayCalStatus(void)
   bno.getCalibration(&system, &gyro, &accel, &mag);
 
   /* The data should be ignored until the system calibration is > 0 */
-  Serial.print("\t");
+  sendDebugMesg(F("\t"));
   if (!system)
   {
-    Serial.print("! ");
+    sendDebugMesg(F("! "));
   }
 
   /* Display the individual values */
-  Serial.print("Sys:");
-  Serial.print(system, DEC);
-  Serial.print(" G:");
-  Serial.print(gyro, DEC);
-  Serial.print(" A:");
-  Serial.print(accel, DEC);
-  Serial.print(" M:");
-  Serial.print(mag, DEC);
+  sendDebugMesg(F("Sys:"));
+  sendDebugMesg(String(system));
+  sendDebugMesg(F(" G:"));
+  sendDebugMesg(String(gyro));
+  sendDebugMesg(F(" A:"));
+  sendDebugMesg(String(accel));
+  sendDebugMesg(F(" M:"));
+  sendDebugMesg(String(mag));
 }
 
 void displaySensorDetails(void)
 {
   sensor_t sensor;
   bno.getSensor(&sensor);
-  Serial.println("------------------------------------");
-  Serial.print  ("Sensor:       "); Serial.println(sensor.name);
-  Serial.print  ("Driver Ver:   "); Serial.println(sensor.version);
-  Serial.print  ("Unique ID:    "); Serial.println(sensor.sensor_id);
-  Serial.print  ("Max Value:    "); Serial.print(sensor.max_value); Serial.println(" xxx");
-  Serial.print  ("Min Value:    "); Serial.print(sensor.min_value); Serial.println(" xxx");
-  Serial.print  ("Resolution:   "); Serial.print(sensor.resolution); Serial.println(" xxx");
-  Serial.println("------------------------------------");
-  Serial.println("");
-  delay(500);
+  sendDebugMesg("------------------------------------");
+  sendDebugMesg  (F("Sensor:       ")); sendDebugMesg(String(sensor.name));
+  sendDebugMesg  (F("Driver Ver:   ")); sendDebugMesg(String(sensor.version));
+  sendDebugMesg  (F("Unique ID:    ")); sendDebugMesg(String(sensor.sensor_id));
+  sendDebugMesg  (F("Max Value:    ")); sendDebugMesg(String(sensor.max_value)); sendDebugMesg(" xxx");
+  sendDebugMesg  (F("Min Value:    ")); sendDebugMesg(String(sensor.min_value)); sendDebugMesg(" xxx");
+  sendDebugMesg  (F("Resolution:   ")); sendDebugMesg(String(sensor.resolution)); sendDebugMesg(" xxx");
+  sendDebugMesg(F("------------------------------------"));
+  sendDebugMesg(F(""));
+  //delay(500);
 }
 
 /**************************************************************************/
@@ -616,13 +762,13 @@ void displaySensorStatus(void)
   bno.getSystemStatus(&system_status, &self_test_results, &system_error);
 
   /* Display the results in the Serial Monitor */
-  Serial.println("");
-  Serial.print("System Status: 0x");
-  Serial.println(system_status, HEX);
-  Serial.print("Self Test:     0x");
-  Serial.println(self_test_results, HEX);
-  Serial.print("System Error:  0x");
-  Serial.println(system_error, HEX);
-  Serial.println("");
-  delay(500);
+  sendDebugMesg(F(""));
+  sendDebugMesg(F("System Status: 0x"));
+  sendDebugMesg(String(system_status));
+  sendDebugMesg(F("Self Test:     0x"));
+  sendDebugMesg(String(self_test_results));
+  sendDebugMesg(F("System Error:  0x"));
+  sendDebugMesg(String(system_error));
+  sendDebugMesg(F(""));
+  //delay(500);
 }
