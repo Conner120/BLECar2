@@ -14,21 +14,20 @@
 
 #include <Adafruit_GPS.h>
 
-// This sketch is ONLY for the Arduino Due!
-// You should make the following connections with the Due and GPS module:
-// GPS power pin to Arduino Due 3.3V output.
-// GPS ground pin to Arduino Due ground.
-// For hardware serial 1 (recommended):
-//   GPS TX to Arduino Due Serial1 RX pin 19
-//   GPS RX to Arduino Due Serial1 TX pin 18
-#define mySerial Serial1
+// If using software serial, keep this line enabled
+// (you can change the pin numbers to match your wiring):
+//SoftwareSerial mySerial(53,52 );
+Adafruit_GPS GPS(&Serial1);
+// If using hardware serial (e.g. Arduino Mega), comment out the
+// above SoftwareSerial line, and enable this line instead
+// (you can change the Serial number to match your wiring):
+HardwareSerial mySerial = Serial1;
 
-Adafruit_GPS GPS(&mySerial);
 
 
 // Set GPSECHO to 'false' to turn off echoing the GPS data to the Serial console
 // Set to 'true' if you want to debug and listen to the raw GPS sentences.
-#define GPSECHO  true
+#define GPSECHO  false
 
 // this keeps track of whether we're using the interrupt
 // off by default!
@@ -252,7 +251,7 @@ void setup(void)
 
   // 9600 NMEA is the default baud rate for Adafruit MTK GPS's- some use 4800
   GPS.begin(9600);
-  mySerial.begin(9600);
+  //mySerial.begin(9600);
 
   // uncomment this line to turn on RMC (recommended minimum) and GGA (fix data) including altitude
   GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
@@ -330,8 +329,10 @@ void loop(void)
     char c = GPS.read();
     // if you want to debug, this is a good time to do it!
     if (GPSECHO)
-      if (c) Serial.print(c);
+      if (c)
+      sendDebugMesg(String(c));
   }
+
 
   // if a sentence is received, we can check the checksum, parse it...
   if (GPS.newNMEAreceived()) {
@@ -351,27 +352,17 @@ void loop(void)
   if (millis() - timer > 2000) {
     timer = millis(); // reset the timer
 
-    Serial.print(F("\nTime: "));
-    Serial.print(GPS.hour, DEC); Serial.print(':');
-    Serial.print(GPS.minute, DEC); Serial.print(':');
-    Serial.print(GPS.seconds, DEC); Serial.print('.');
-    Serial.println(GPS.milliseconds);
-    Serial.print(F("Date: "));
-    Serial.print(GPS.day, DEC); Serial.print('/');
-    Serial.print(GPS.month, DEC); Serial.print(F("/20"));
-    Serial.println(GPS.year, DEC);
-    Serial.print(F("Fix: ")); Serial.print((int)GPS.fix);
-    Serial.print(F(" quality: ")); Serial.println((int)GPS.fixquality);
+   sendDebugMesg("\nTime: "+String(GPS.hour)+":"+String(GPS.minute)+":"+String(GPS.seconds)+":"+String(GPS.milliseconds));
+   sendDebugMesg("Date: "+String(GPS.day)+"/"+String(GPS.month)+"/20"+String(GPS.year));
+   sendDebugMesg("Fix: "+String(GPS.fix));
+   sendDebugMesg(" quality: "+String(GPS.fixquality));
     if (GPS.fix) {
-      Serial.print(F("Location: "));
-      Serial.print(GPS.latitude, 4); Serial.print(GPS.lat);
-      Serial.print(F(", "));
-      Serial.print(GPS.longitude, 4); Serial.println(GPS.lon);
+     sendDebugMesg("Location: "+String(GPS.latitude)+String(GPS.lat)+", "+String(GPS.longitude)+String(GPS.lon));
 
-      Serial.print(F("Speed (knots): ")); Serial.println(GPS.speed);
-      Serial.print(F("Angle: ")); Serial.println(GPS.angle);
-      Serial.print(F("Altitude: ")); Serial.println(GPS.altitude);
-      Serial.print(F("Satellites: ")); Serial.println((int)GPS.satellites);
+     sendDebugMesg("Speed (knots): "+String(GPS.speed));
+     sendDebugMesg("Angle: "+String(GPS.angle));
+     sendDebugMesg("Altitude: "+String(GPS.altitude));
+     sendDebugMesg("Satellites: "+String(GPS.satellites));
     }
   }
   //delay(2500);
@@ -448,7 +439,7 @@ void loop(void)
         if (str[0] == 'r') {
           float motorValue = str.substring(1, str.length() - 1).toFloat() / 5;
           sendDebugMesg(str.substring(1, str.length() - 1));
-          sendDebugMesg("Right Motor run at: " + String(motorValue) + "%");
+          sendDebugMesg("Right Motor run at: " + Striddsng(motorValue) + "%");
           if ((motorValue * 1023) < 0.000) {
             motorgo(0, 1, motorValue * -1023);
           } else if ((motorValue * 1023) > 0.000) {
