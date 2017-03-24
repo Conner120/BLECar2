@@ -71,7 +71,7 @@ int fullSpeed = 512;
 int halfSpeed = 256;
 int threeQuarterSpeed = 384;
 int quarterSpeed = 128;
-float origonalHeading = 0.0;
+float orgHeading = 0.0;
 float finalHeading = 0.0;
 float heading = 0.0;
 
@@ -432,14 +432,14 @@ void loop(void)
       //    Serial.print(c, HEX);
       //    Serial.print("] ");
       if (c == '/') {
-        ///  if (mode > 1) {
+        ///  if (mode > 1) {b
         //sendDebugMesg(str);
         //sendDebugMesg(F("Running Command Checker..."));
         //}
         if (str[0] == 'r') {
           float motorValue = str.substring(1, str.length() - 1).toFloat() / 5;
           sendDebugMesg(str.substring(1, str.length() - 1));
-          sendDebugMesg("Right Motor run at: " + Striddsng(motorValue) + "%");
+          sendDebugMesg("Right Motor run at: " + String(motorValue) + "%");
           if ((motorValue * 1023) < 0.000) {
             motorgo(0, 1, motorValue * -1023);
           } else if ((motorValue * 1023) > 0.000) {
@@ -762,4 +762,30 @@ void displaySensorStatus(void)
   sendDebugMesg(String(system_error));
   sendDebugMesg(F(""));
   //delay(500);
+}
+
+void exPath(){
+  int pathIndex = findAvaliblePath();
+  switch (pathIndex) {
+    case 1:
+      forwardAuto(fullSpeed);
+    break;
+  }
+}
+void forwardAuto(int speed){
+  imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
+  if (euler.x()>orgHeading){
+    float mag = euler.x()/(orgHeading);
+    forwardLeft(mag);
+  }
+
+}
+void getSensor(){
+  sensors_event_t event;
+bno.getEvent(&event);
+}
+void forwardLeft(float mag){
+  if debuging{
+  sendDebugMesg("magnatude: "+String(mag));
+}
 }
