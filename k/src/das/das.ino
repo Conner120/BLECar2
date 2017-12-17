@@ -647,24 +647,24 @@ void checkSensors() {
   if (irSensorCheck(sideLeftSensorPin)) {
     statStr += "1";
     sideLeftSensorState = false;
-    stop();
   } else {
+    stop(sideLeftSensorPin);
     statStr += "0";
     sideLeftSensorState = true;
   }
   if (irSensorCheck(frontRightSensorPin)) {
     statStr += "1";
     frontRightSensorState = false;
-    stop();
   } else {
+    stop(frontRightSensorPin);
     frontRightSensorState = true;
     statStr += "0";
   }
   if (irSensorCheck(rearLeftSensorPin)) { //4
     statStr += "1";
     rearLeftSensorState = false;
-    stop();
   } else {
+    stop(rearLeftSensorPin);
     rearLeftSensorState = true;
     statStr += "0";
   }
@@ -672,40 +672,42 @@ void checkSensors() {
   if (irSensorCheck(sideRightSensorPin)) { //1
     statStr += "1";
     sideRightSensorState = false;
-    stop();
   } else {
+    stop(sideRightSensorPin);
     statStr += "0";
     sideRightSensorState = true;
   }
   if (irSensorCheck(frontLeftSensorPin)) { //5
     statStr += "1";
     frontLeftSensorState = false;
-    stop();
   } else {
+    stop(frontLeftSensorPin);
     statStr += "0";
     frontLeftSensorState = true;
   }
   if (irSensorCheck(rearRightSensorPin)) { //2
     statStr += "1";
     rearRightSensorState = false;
-    stop();
+
   } else {
+    stop(rearRightSensorPin);
     statStr += "0";
     rearRightSensorState = true;
   }
   if (irSensorCheck(frontCenterSensorPin)) {
     statStr += "1";
     frontCenterSensorState = false;
-    stop();
   } else {
+    stop(frontCenterSensorPin);
     statStr += "0";
     frontCenterSensorState = true;
   }
   if (irSensorCheck(rearCenterSensorPin)) {
     statStr += "1";
     rearCenterSensorState = false;
-    stop();
+
   } else {
+    stop(rearCenterSensorPin);
     statStr += "0";
     rearCenterSensorState = true;
   }
@@ -715,8 +717,9 @@ void checkSensors() {
   if (irSensorCheck(rearFallSensorPin)) { //3
     statStr += "1";
     rearFallSensorState = false;
-    stop();
+    stop(rearFallSensorPin);
   } else {
+
     statStr += "0";
     rearFallSensorState = true;
   }
@@ -726,8 +729,9 @@ void checkSensors() {
   if (irSensorCheck(frontFallSensorPin)) { //4
     statStr += "1";
     frontFallSensorState = false;
-    stop();
+    stop(frontFallSensorPin);
   } else {
+
     statStr += "0";
     frontFallSensorState = true;
   }
@@ -755,10 +759,10 @@ void checkCommand(String str) {
     mode = 0;
   } else if (str.indexOf(F("debugOn/")) > -1) {
     mode = 5;
-  }else if (str.indexOf(F("toneUP/")) > -1) {
-    toneSet =+ 75;
-  }else if (str.indexOf(F("toneDown/")) > -1) {
-    toneSet =- 75;
+  } else if (str.indexOf(F("toneUP/")) > -1) {
+    toneSet = + 75;
+  } else if (str.indexOf(F("toneDown/")) > -1) {
+    toneSet = - 75;
   }
   else if (str.indexOf(F("hLightOn/")) > -1) {
     headLightOn();
@@ -838,10 +842,10 @@ boolean irSensorCheck(int pin) {
 
 // motor controller Functions
 
-void stop() {
-motorOff(0);
-motorOff(1);
-sendDebugMesg("Obstical detected");
+void stop(int pin) {
+  motorOff(0);
+  motorOff(1);
+  sendDebugMesg("Obstical detected on: " + String(pin));
 }
 
 
@@ -1026,4 +1030,3 @@ void forwardLeft(float mag) {
     sendDebugMesg("magnatude: " + String(mag));
   }
 }
-
